@@ -1,101 +1,108 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title></title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
-      const baseApi = "https://birthdayhm65.pythonanywhere.com/"
+      const baseApi = "https://birthdayhm65.pythonanywhere.com/";
 
       const endpoints = {
-        "VolumeAlertBot": "get_VolumeAlertBot_tweets",
-        "VolatDetector": "get_VolatDetector_tweets",
-        "BigOrderDtctr": "get_BigOrderDtctr_tweets",
-        "CallBotCrypto": "get_CallBotCrypto_tweets",
-        "LivePumps": "get_LivePumps_tweets"
-      }
+        VolumeAlertBot: "get_VolumeAlertBot_tweets",
+        VolatDetector: "get_VolatDetector_tweets",
+        BigOrderDtctr: "get_BigOrderDtctr_tweets",
+        CallBotCrypto: "get_CallBotCrypto_tweets",
+        LivePumps: "get_LivePumps_tweets",
+      };
 
-
-    $(document).ready(function(){
-      $("#btnVolumeAlertBot").click(function(){
-        $("#VolumeAlertBot").fadeIn();
-        $("#VolatDetector").fadeOut();
-        $("#BigOrderDtctr").fadeOut();
-        $("#CallBotCrypto").fadeOut();
-        $("#LivePumps").fadeOut();
-
+      function callApi(endpoint, name) {
         $.ajax({
-          url: baseApi + endpoints.VolumeAlertBot,
+          url: baseApi + endpoint,
           type: "GET",
-          success: function(data) {
-            console.log(data)
+          success: function (data) {
+            console.log(data);
 
-            let tweets = data.tweets
-            let tweetPanel = document.getElementById("VolumeAlertBot")
+            let tweets = data.output;
+            let tweetPanel = document.getElementById(name);
 
             // loop through tweets and add them to the page
             for (let i = 0; i < tweets.length; i++) {
-              let tweet = tweets[i]
-              let tweetDiv = document.createElement("div")
-              tweetDiv.className = "tweetPanel"
+              let tweet = tweets[i];
+              let tweetDiv = document.createElement("div");
+              tweetDiv.className = "tweetPanel";
 
-              let tweetUrl = document.createElement("a")
+              let tweetUrl = document.createElement("a");
               tweetUrl.href = tweet.URL;
+              tweetUrl.innerHTML = "<p><strong>URL</strong></p>";
 
-              let tweetUrlText = document.createElement("p")
-              tweetUrlText.innerHTML = tweet.text
+              let tweetUrlText = document.createElement("p");
+              tweetUrlText.innerHTML = "<strong>Text </strong>" + tweet.text;
 
+              let tweetDatetime = document.createElement("p");
+              tweetDatetime.innerHTML =
+                "<strong>Datetime </strong>" + tweet.datetime;
+
+              tweetDiv.appendChild(tweetUrl);
+              tweetDiv.appendChild(tweetDatetime);
+              tweetDiv.appendChild(tweetUrlText);
+              tweetPanel.appendChild(tweetDiv);
             }
-        },  error: function(error) {
-            console.log(error)
-          }
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      }
+
+      $(document).ready(function () {
+        callApi(endpoints.VolumeAlertBot, "VolumeAlertBot");
+        $("#btnVolumeAlertBot").click(function () {
+          $("#VolumeAlertBot").fadeIn();
+          $("#VolatDetector").fadeOut();
+          $("#BigOrderDtctr").fadeOut();
+          $("#CallBotCrypto").fadeOut();
+          $("#LivePumps").fadeOut();
+          callApi(endpoints.VolumeAlertBot, "VolumeAlertBot");
+        });
+
+        $("#btnVolatDetector").click(function () {
+          $("#VolumeAlertBot").fadeOut();
+          $("#VolatDetector").fadeIn();
+          $("#BigOrderDtctr").fadeOut();
+          $("#CallBotCrypto").fadeOut();
+          $("#LivePumps").fadeOut();
+          callApi(endpoints.VolatDetector, "VolatDetector");
+        });
+
+        $("#btnBigOrderDtctr").click(function () {
+          $("#VolumeAlertBot").fadeOut();
+          $("#VolatDetector").fadeOut();
+          $("#BigOrderDtctr").fadeIn();
+          $("#CallBotCrypto").fadeOut();
+          $("#LivePumps").fadeOut();
+          callApi(endpoints.BigOrderDtctr, "BigOrderDtctr");
+        });
+
+        $("#btnCallBotCrypto").click(function () {
+          $("#VolumeAlertBot").fadeOut();
+          $("#VolatDetector").fadeOut();
+          $("#BigOrderDtctr").fadeOut();
+          $("#CallBotCrypto").fadeIn();
+          $("#LivePumps").fadeOut();
+          callApi(endpoints.CallBotCrypto, "CallBotCrypto");
+        });
+
+        $("#btnLivePumps").click(function () {
+          $("#VolumeAlertBot").fadeOut();
+          $("#VolatDetector").fadeOut();
+          $("#BigOrderDtctr").fadeOut();
+          $("#CallBotCrypto").fadeOut();
+          $("#LivePumps").fadeIn();
+          callApi(endpoints.LivePumps, "LivePumps");
         });
       });
-    });
-    
-    $(document).ready(function(){
-      $("#btnVolatDetector").click(function(){
-        $("#VolumeAlertBot").fadeOut();
-        $("#VolatDetector").fadeIn();
-        $("#BigOrderDtctr").fadeOut();
-        $("#CallBotCrypto").fadeOut();
-        $("#LivePumps").fadeOut();
-      });
-    });
-   
-    $(document).ready(function(){
-      $("#btnBigOrderDtctr").click(function(){
-        $("#VolumeAlertBot").fadeOut();
-        $("#VolatDetector").fadeOut();
-        $("#BigOrderDtctr").fadeIn();
-        $("#CallBotCrypto").fadeOut();
-        $("#LivePumps").fadeOut();
-      });
-    });
-   
-
- 
-    $(document).ready(function(){
-      $("#btnCallBotCrypto").click(function(){
-        $("#VolumeAlertBot").fadeOut();
-        $("#VolatDetector").fadeOut();
-        $("#BigOrderDtctr").fadeOut();
-        $("#CallBotCrypto").fadeIn();
-        $("#LivePumps").fadeOut();
-      });
-    });
-   
-    $(document).ready(function(){
-      $("#btnLivePumps").click(function(){
-        $("#VolumeAlertBot").fadeOut();
-        $("#VolatDetector").fadeOut();
-        $("#BigOrderDtctr").fadeOut();
-        $("#CallBotCrypto").fadeOut();
-        $("#LivePumps").fadeIn();
-      });
-    });
     </script>
   </head>
   <body>
@@ -112,43 +119,15 @@
         <div class="button" id="btnLivePumps">LivePumps</div>
       </div>
 
-      <div class="selectWindow" id="VolumeAlertBot">
-        <div class="tweetPanel">
-          <a href="https://twitter.com/BigOrderDtctr/status/1612768761181773824"><p><strong>URL</strong></p></a>
-          <p><strong>Datetime</strong> 2023-01-10 12:10:11 Western European Standard Time</p>
-          <p><strong>Text</strong> #HOT/USDT   Enter at: 0.001585$ Take profit at: 0.001653$ Stop loss: 0.001517$ Accuracy of the analyses: 80.9% I am a trading #bot. Signals may be right and may be wrong, #DYOR! #holochain #cryptonews #daytrader #blockchain</p>
-        </div>
-        <div class="tweetPanel">
-          <a href="https://twitter.com/BigOrderDtctr/status/1612768761181773824"><p><strong>URL</strong></p></a>
-          <p><strong>Datetime</strong> 2023-01-10 12:10:11 Western European Standard Time</p>
-          <p><strong>Text</strong> #HOT/USDT   Enter at: 0.001585$ Take profit at: 0.001653$ Stop loss: 0.001517$ Accuracy of the analyses: 80.9% I am a trading #bot. Signals may be right and may be wrong, #DYOR! #holochain #cryptonews #daytrader #blockchain</p>
-        </div>
-      </div>
+      <div class="selectWindow" id="VolumeAlertBot"></div>
 
-      <div class="selectWindow" id="VolatDetector" style="display: None;">
-        <div class="tweetPanel">
-          <a href="https://twitter.com/BigOrderDtctr/status/1612768761181773824"><p><strong>URL</strong></p></a>
-          <p><strong>Datetime</strong> 2023-01-10 12:10:11 Western European Standard Time</p>
-          <p><strong>Text</strong> #HOT/USDT   Enter at: 0.001585$ Take profit at: 0.001653$ Stop loss: 0.001517$ Accuracy of the analyses: 80.9% I am a trading #bot. Signals may be right and may be wrong, #DYOR! #holochain #cryptonews #daytrader #blockchain</p>
-        </div>
-        <div class="tweetPanel">
-          <a href="https://twitter.com/BigOrderDtctr/status/1612768761181773824"><p><strong>URL</strong></p></a>
-          <p><strong>Datetime</strong> 2023-01-10 12:10:11 Western European Standard Time</p>
-          <p><strong>Text</strong> #HOT/USDT   Enter at: 0.001585$ Take profit at: 0.001653$ Stop loss: 0.001517$ Accuracy of the analyses: 80.9% I am a trading #bot. Signals may be right and may be wrong, #DYOR! #holochain #cryptonews #daytrader #blockchain</p>
-        </div>
-      </div>
+      <div class="selectWindow" id="VolatDetector" style="display: None"></div>
 
+      <div class="selectWindow" id="BigOrderDtctr" style="display: None"></div>
 
-      <div class="selectWindow" id="BigOrderDtctr" style="display: None;">
-      </div>
+      <div class="selectWindow" id="CallBotCrypto" style="display: None"></div>
 
-      <div class="selectWindow" id="CallBotCrypto" style="display: None;">
-      </div>
-
-      <div class="selectWindow" id="LivePumps" style="display: None;">
-      </div>
-
+      <div class="selectWindow" id="LivePumps" style="display: None"></div>
     </div>
-
   </body>
 </html>
