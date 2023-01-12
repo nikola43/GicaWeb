@@ -45,12 +45,13 @@
               //tweetUrl.href = tweet.URL;
               //tweetUrl.innerHTML = "<p><strong>URL</strong></p>";
 
+              let numberOfDays = getPastDaysFromDatetime(tweet.datetime);
+              let daysAgo = numberOfDays > 1 ? " days ago" : " day ago";
+
               let sectionTitle = document.createElement("h2");
               sectionTitle.innerHTML =
-                name +
-                "<span> " +
-                getPastDaysFromDatetime(tweet.datetime) + " days ago"
-                "</span>";
+                name + "<span> " + numberOfDays + daysAgo;
+              ("</span>");
 
               let tweetUrlText = document.createElement("p");
               tweetUrlText.innerHTML = tweet.text;
