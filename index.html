@@ -17,6 +17,14 @@
         LivePumps: "get_LivePumps_tweets",
       };
 
+      function getPastDaysFromDatetime(datetime) {
+        let date = new Date(datetime);
+        let today = new Date();
+        let diff = Math.abs(today - date);
+        let diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+        return diffDays;
+      }
+
       function callApi(endpoint, name) {
         $.ajax({
           url: baseApi + endpoint,
@@ -33,19 +41,22 @@
               let tweetDiv = document.createElement("div");
               tweetDiv.className = "tweetPanel";
 
-              let tweetUrl = document.createElement("a");
-              tweetUrl.href = tweet.URL;
-              tweetUrl.innerHTML = "<p><strong>URL</strong></p>";
+              //let tweetUrl = document.createElement("a");
+              //tweetUrl.href = tweet.URL;
+              //tweetUrl.innerHTML = "<p><strong>URL</strong></p>";
+
+              let sectionTitle = document.createElement("h2");
+              sectionTitle.innerHTML =
+                name +
+                "<span> " +
+                getPastDaysFromDatetime(tweet.datetime) + " days ago"
+                "</span>";
 
               let tweetUrlText = document.createElement("p");
-              tweetUrlText.innerHTML = "<strong>Text </strong>" + tweet.text;
+              tweetUrlText.innerHTML = tweet.text;
 
-              let tweetDatetime = document.createElement("p");
-              tweetDatetime.innerHTML =
-                "<strong>Datetime </strong>" + tweet.datetime;
-
-              tweetDiv.appendChild(tweetUrl);
-              tweetDiv.appendChild(tweetDatetime);
+              //tweetDiv.appendChild(tweetUrl);
+              tweetDiv.appendChild(sectionTitle);
               tweetDiv.appendChild(tweetUrlText);
               tweetPanel.appendChild(tweetDiv);
             }
