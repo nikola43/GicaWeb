@@ -17,13 +17,24 @@
         LivePumps: "get_LivePumps_tweets",
       };
 
-      function getPastDaysFromDatetime(datetime) {
+      // function to calculate the time that has elapsed since a date, will return this format "1 day, 2 hours, 3 minutes, 4 seconds"
+      function getElapsedTimeFromDate(datetime) {
+        let now = new Date();
         let date = new Date(datetime);
-        let today = new Date();
-        let diff = Math.abs(today - date);
-        let diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-        return diffDays;
+        let diff = now - date;
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        let minutes = Math.floor((diff / 1000 / 60) % 60);
+        let seconds = Math.floor((diff / 1000) % 60);
+
+        return {
+          days: days,
+          hours: hours,
+          minutes: minutes,
+          seconds: seconds,
+        };
       }
+
 
       function callApi(endpoint, name) {
         $.ajax({
@@ -45,12 +56,26 @@
               //tweetUrl.href = tweet.URL;
               //tweetUrl.innerHTML = "<p><strong>URL</strong></p>";
 
-              let numberOfDays = getPastDaysFromDatetime(tweet.datetime);
-              let daysAgo = numberOfDays > 1 ? " days ago" : " day ago";
+              let elapsedTime = getElapsedTimeFromDate(tweet.datetime);
+              let daysAgo = elapsedTime.days;
+              let hoursAgo = elapsedTime.hours;
+              let minutesAgo = elapsedTime.minutes;
 
               let sectionTitle = document.createElement("h2");
+              let numberOfDays = "";
+              
+              if (daysAgo > 0 && hoursAgo > 0 && minutesAgo > 0) {
+                numberOfDays = daysAgo + " days, " + hoursAgo + " hours, " + minutesAgo + " minutes ago";
+              } else if (hoursAgo > 0 && minutesAgo > 0) {
+                numberOfDays = hoursAgo + " hours, " + minutesAgo + " minutes ago";
+              } else {
+                numberOfDays = minutesAgo + " minutes ago";
+              }
+              
+              //let numberOfDays = daysAgo + " days, " + hoursAgo + " hours, " + minutesAgo + " minutes ago";
+
               sectionTitle.innerHTML =
-                name + "<span> " + numberOfDays + daysAgo;
+                name + "<span> " + numberOfDays;
               ("</span>");
 
               let tweetUrlText = document.createElement("p");
