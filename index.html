@@ -35,7 +35,6 @@
         };
       }
 
-
       function callApi(endpoint, name) {
         $.ajax({
           url: baseApi + endpoint,
@@ -63,19 +62,35 @@
 
               let sectionTitle = document.createElement("h2");
               let numberOfDays = "";
-              
+
+              if (daysAgo < 0) {
+                daysAgo *= -1;
+              }
+              if (hoursAgo < 0) {
+                hoursAgo *= -1;
+              }
+              if (minutesAgo < 0) {
+                minutesAgo *= -1;
+              }
+
               if (daysAgo > 0 && hoursAgo > 0 && minutesAgo > 0) {
-                numberOfDays = daysAgo + " days, " + hoursAgo + " hours, " + minutesAgo + " minutes ago";
+                numberOfDays =
+                  daysAgo +
+                  " days, " +
+                  hoursAgo +
+                  " hours, " +
+                  minutesAgo +
+                  " minutes ago";
               } else if (hoursAgo > 0 && minutesAgo > 0) {
-                numberOfDays = hoursAgo + " hours, " + minutesAgo + " minutes ago";
+                numberOfDays =
+                  hoursAgo + " hours, " + minutesAgo + " minutes ago";
               } else {
                 numberOfDays = minutesAgo + " minutes ago";
               }
-              
+
               //let numberOfDays = daysAgo + " days, " + hoursAgo + " hours, " + minutesAgo + " minutes ago";
 
-              sectionTitle.innerHTML =
-                name + "<span> " + numberOfDays;
+              sectionTitle.innerHTML = name + "<span> " + numberOfDays;
               ("</span>");
 
               let tweetUrlText = document.createElement("p");
